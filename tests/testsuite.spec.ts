@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 
+require('dotenv').config();
+
 test.describe('Frontend tests', () => {
   test('Test01 - Logga in', async ({ page }) => {
     await page.goto('http://localhost:3000');
@@ -7,7 +9,8 @@ test.describe('Frontend tests', () => {
     await page.locator('input[type="password"]').fill(`${process.env.TEST_PASSWORD}`);
     await page.getByRole('button', { name: 'Login' }).click();
     console.log('Clicked on Login button');
-    await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible({ timeout: 20000 });
   });
 });
 
